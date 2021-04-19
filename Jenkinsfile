@@ -14,21 +14,25 @@ pipeline {
         }
         stage( 'Build' ) {
             steps {
+                echo 'Compiling...',
                 sh 'mvn compile'
             }
         }
         stage( 'Test' ) {
             steps {
+                echo 'Testing...',
                 sh 'mvn test'
             }
         }
         stage( 'Package' ) {
             steps {
+                echo 'Packaging...',
                 sh 'mvn package'
             }
         }
         stage( 'Deploy' ) {
             steps {
+                echo 'Deploying...',
                 sh 'java -jar /var/lib/jenkins/workspace/PetClinic-DeclarativePipeline/target/*.jar'
             }
         }
