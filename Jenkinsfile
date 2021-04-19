@@ -8,19 +8,20 @@ pipeline {
     stages {
         stage( 'Checkout' ) {
             steps {
+                sh 'echo "Checking out source code..."'
                 git branch: 'main',
                 url: 'https://github.com/NETLINK/spring-petclinic.git'
             }
         }
         stage( 'Build' ) {
             steps {
-                echo 'Compiling...',
+                echo 'Compiling...'
                 sh 'mvn compile'
             }
         }
         stage( 'Test' ) {
             steps {
-                echo 'Testing...',
+                echo 'Testing...'
                 sh 'mvn test'
             }
         }
