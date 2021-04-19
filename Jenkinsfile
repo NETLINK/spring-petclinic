@@ -1,18 +1,3 @@
-def sonarScanner(projectKey) {
-    def scannerHome = tool 'sonarqube-scanner'
-    withSonarQubeEnv( "sonarqube" ) {
-        if ( fileExists( "sonar-project.properties" ) ) {
-            sh "${scannerHome}/bin/sonar-scanner"
-        }
-        else {
-            sh "${scannerHome}/bin/sonar-scanner -     Dsonar.projectKey=${projectKey} -Dsonar.java.binaries=build/classes -Dsonar.java.libraries=**/*.jar -Dsonar.projectVersion=${BUILD_NUMBER}"
-        }
-    }
-    timeout(time: 10, unit: 'MINUTES') {
-        waitForQualityGate abortPipeline: true
-    }
-}
-
 pipeline {
     agent {
         label 'master'
@@ -27,11 +12,19 @@ pipeline {
                 url: 'https://github.com/NETLINK/spring-petclinic.git'
             }
         }
-		stage( 'SonarQube Code Scan' ) {
-			steps {
-				script {
-					sonarScanner( 'category-service' )
+		stage( 'build & SonarQube analysis' ) {
+        	agent any
+            steps {
+				withSonarQubeEnv( 'SonarQube' ) {
+					sh 'mvn clean package sonar:sonar'
 				}
+			}
+		}
+		stage( 'Quality Gate' ) {
+            steps {
+              timeout( time: 1, unit: 'HOURS' ) {
+				  waitForQualityGate abortPipeline: true
+			  }
 			}
 		}
         stage( 'Build' ) {
