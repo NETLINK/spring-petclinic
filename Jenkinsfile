@@ -47,7 +47,7 @@ pipeline {
 				sh 'docker build -t netlinkie/petclinic:1.0.0 .'
 			}
 		}
-		steg( 'Push Docker Image' ) {
+		stage( 'Push Docker Image' ) {
 			withCredentials( [ usernamePassword( credentialsId: 'DockerCredentials', passwordVariable: 'DockerPass', usernameVariable: 'DockerUser' ) ] ) {
 				sh 'docker login -u DockerUser -p DockerPass'
 			}
