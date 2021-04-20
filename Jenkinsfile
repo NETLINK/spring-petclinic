@@ -12,7 +12,7 @@ pipeline {
 				url: 'https://github.com/NETLINK/spring-petclinic.git'
 			}
 		}
-		stage( 'Validate Project' ) {
+		stage( 'Validate' ) {
 			steps {
 				sh 'mvn validate'
 			}
