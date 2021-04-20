@@ -42,10 +42,16 @@ pipeline {
 				}
 			}
 		}
-		stage( 'Deploy' ) {
+		stage( 'Build Docker Image' ) {
 			steps {
-				sh 'java -jar /var/lib/jenkins/workspace/PetClinic-DeclarativePipeline/target/*.jar'
+				sh 'docker build -t netlinkie/petclinic:1.0.0 .'
 			}
+		}
+		steg( 'Push Docker Image' ) {
+			withCredentials( [ usernamePassword( credentialsId: 'DockerCredentials', passwordVariable: 'DockerPass', usernameVariable: 'DockerUser' ) ] ) {
+				sh 'docker login -u DockerUser -p DockerPass'
+			}
+			sh 'docker push -t netlinkie/petclinic:1.0.0'
 		}
 	}
 }
