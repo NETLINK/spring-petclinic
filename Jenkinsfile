@@ -48,10 +48,12 @@ pipeline {
 			}
 		}
 		stage( 'Push Docker Image' ) {
-			withCredentials( [ usernamePassword( credentialsId: 'DockerCredentials', passwordVariable: 'DockerPass', usernameVariable: 'DockerUser' ) ] ) {
-				sh 'docker login -u DockerUser -p DockerPass'
+			steps {
+				withCredentials( [ usernamePassword( credentialsId: 'DockerCredentials', passwordVariable: 'DockerPass', usernameVariable: 'DockerUser' ) ] ) {
+					sh "docker login -u ${DockerUser} -p ${DockerPass}"
+				}
+				sh 'docker push -t netlinkie/petclinic:1.0.0'
 			}
-			sh 'docker push -t netlinkie/petclinic:1.0.0'
 		}
 	}
 }
