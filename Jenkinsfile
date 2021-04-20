@@ -12,19 +12,9 @@ pipeline {
 				url: 'https://github.com/NETLINK/spring-petclinic.git'
 			}
 		}
-		stage( 'build & SonarQube analysis' ) {
-			agent any
+		stage( 'Validate Project' ) {
 			steps {
-				withSonarQubeEnv( 'SonarQube' ) {
-					sh 'mvn clean package sonar:sonar'
-				}
-			}
-		}
-		stage( 'Quality Gate' ) {
-			steps {
-				timeout( time: 1, unit: 'HOURS' ) {
-					waitForQualityGate abortPipeline: true
-				}
+				sh 'mvn validate'
 			}
 		}
 		stage( 'Build' ) {
@@ -37,9 +27,19 @@ pipeline {
 				sh 'mvn test'
 			}
 		}
-		stage( 'Package' ) {
+		stage( 'SonarQube Analysis' ) {
+			agent any
 			steps {
-				sh 'mvn package'
+				withSonarQubeEnv( 'SonarQube' ) {
+					sh 'mvn clean package sonar:sonar'
+				}
+			}
+		}
+		stage( 'Quality Gate' ) {
+			steps {
+				timeout( time: 1, unit: 'HOURS' ) {
+					waitForQualityGate abortPipeline: true
+				}
 			}
 		}
 		stage( 'Deploy' ) {
