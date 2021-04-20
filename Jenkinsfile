@@ -19,7 +19,7 @@ pipeline {
 		}
 		stage( 'Build' ) {
 			steps {
-				sh 'mvn compile'
+				sh 'mvn compile war:war'
 			}
 		}
 		stage( 'Test' ) {
@@ -42,10 +42,11 @@ pipeline {
 				}
 			}
 		}
+		/*
 		stage( 'Deploy' ) {
 			steps {
 				sh 'java -jar /var/lib/jenkins/workspace/PetClinic-DeclarativePipeline/target/*.jar'
 			}
 		}
+		*/
 	}
-}
