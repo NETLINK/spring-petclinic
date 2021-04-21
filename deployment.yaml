@@ -2,9 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: petclinic
+  labels:
+    app: petclinic
 spec:
-strategy:
-  type: Recreate
+  strategy:
+    type: Recreate
 template:
   metadata:
     labels:
@@ -22,14 +24,13 @@ template:
 apiVersion: v1
 kind: Service
 metadata:
-name: petclinic
-labels:
-  app: petclinic
+  name: petclinic
+  labels:
+    app: petclinic
 spec:
-ports:
-  - port: 5000
+  ports:
+    - port: 5000
     targetPort: 5000
 selector:
   app: petclinic
-  tier: petclinic
 type: LoadBalancer
