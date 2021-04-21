@@ -24,7 +24,7 @@ pipeline {
 				sh 'mvn validate'
 			}
 		}
-		stage( 'Build' ) {
+		stage( 'Build (Compile, Test, Package)' ) {
 			steps {
 				sh 'mvn clean install'
 			}
