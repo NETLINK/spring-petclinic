@@ -28,7 +28,21 @@ pipeline {
 				sh 'mvn compile war:war'
 			}
 		}
-
+		stage( 'SonarQube Analysis' ) {
+			agent any
+			steps {
+				withSonarQubeEnv( 'SonarQube' ) {
+					sh 'mvn clean package sonar:sonar'
+				}
+			}
+		}
+		stage( 'Quality Gate' ) {
+			steps {
+				timeout( time: 1, unit: 'HOURS' ) {
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
 		stage( 'Build Docker Image' ) {
 			steps {
 				sh "docker build -t netlinkie/petclinic:${env.BUILD_ID} ."
