@@ -30,7 +30,7 @@ metadata:
 spec:
   ports:
     - port: 5000
-    targetPort: 5000
+      targetPort: 5000
 selector:
   app: petclinic
 type: LoadBalancer
