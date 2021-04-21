@@ -1,7 +1,9 @@
 pipeline {
 	agent {
-		label 'master'
-        customWorkspace "${JENKINS_HOME}/workspace/${JOB_NAME}/${BUILD_NUMBER}"
+		node {
+			label 'master'
+			customWorkspace "${JENKINS_HOME}/workspace/${JOB_NAME}/${BUILD_NUMBER}"
+		}
 	}
 	environment {
 		PROJECT_ID = 'devops-311301'
