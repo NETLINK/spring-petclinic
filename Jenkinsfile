@@ -27,32 +27,18 @@ pipeline {
 				sh 'mvn test'
 			}
 		}
-		stage( 'SonarQube Analysis' ) {
-			agent any
-			steps {
-				withSonarQubeEnv( 'SonarQube' ) {
-					sh 'mvn clean package sonar:sonar'
-				}
-			}
-		}
-		stage( 'Quality Gate' ) {
-			steps {
-				timeout( time: 1, unit: 'HOURS' ) {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
+
 		stage( 'Build Docker Image' ) {
 			steps {
-				sh 'sudo docker build -t netlinkie/petclinic:1.0.0 .'
+				sh 'docker build -t netlinkie/petclinic:1.0.0 .'
 			}
 		}
 		stage( 'Push Docker Image' ) {
 			steps {
 				withCredentials( [ usernamePassword( credentialsId: 'DockerCredentials', passwordVariable: 'DockerPass', usernameVariable: 'DockerUser' ) ] ) {
-					sh "sudo docker login -u ${DockerUser} -p ${DockerPass}"
+					sh "docker login -u ${DockerUser} -p ${DockerPass}"
 				}
-				sh 'sudo docker push -t netlinkie/petclinic:1.0.0'
+				sh 'docker push -t netlinkie/petclinic:1.0.0'
 			}
 		}
 	}
