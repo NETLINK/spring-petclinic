@@ -22,11 +22,7 @@ pipeline {
 				sh 'mvn compile war:war'
 			}
 		}
-		stage( 'Test' ) {
-			steps {
-				sh 'mvn test'
-			}
-		}
+
 
 		stage( 'Build Docker Image' ) {
 			steps {
