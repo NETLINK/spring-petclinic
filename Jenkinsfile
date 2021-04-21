@@ -4,8 +4,8 @@ pipeline {
 	}
 	environment {
 		PROJECT_ID = 'devops-311301'
-		CLUSTER_NAME = 'CLUSTER-NAME'
-		LOCATION = 'CLUSTER-LOCATION'
+		CLUSTER_NAME = 'cluster-1'
+		LOCATION = 'europe-west1-c'
 		CREDENTIALS_ID = 'GKE'
 	}
 	tools {
@@ -33,21 +33,7 @@ pipeline {
 				sh 'mvn test'
 			}
 		}
-		stage( 'SonarQube Analysis' ) {
-			agent any
-			steps {
-				withSonarQubeEnv( 'SonarQube' ) {
-					sh 'mvn clean package sonar:sonar'
-				}
-			}
-		}
-		stage( 'Quality Gate' ) {
-			steps {
-				timeout( time: 1, unit: 'HOURS' ) {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
+
 		stage( 'Build Docker Image' ) {
 			steps {
 				sh "docker build -t netlinkie/petclinic:${env.BUILD_ID} ."
