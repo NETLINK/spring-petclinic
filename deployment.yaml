@@ -1,8 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: petclinic
-  namespace: default
+  name: petclinic-deployment
+  labels:
+    app: petclinic
 spec:
   replicas: 1
   selector:
@@ -16,16 +17,5 @@ spec:
       containers:
       - name: petclinic
         image: netlinkie/petclinic:latest
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: petclinic
-  namespace: default
-spec:
-  type: LoadBalancer
-  selector:
-    app: petclinic
-  ports:
-  - port: 5000
-    targetPort: 5000
+        ports:
+        - containerPort: 8080
