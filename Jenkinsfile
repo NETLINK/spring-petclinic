@@ -14,6 +14,7 @@ pipeline {
 		}
 		stage( 'Validate' ) {
 			steps {
+                                sh 'mvn dependency:purge-local-repository'
 				sh 'mvn clean validate'
 			}
 		}
