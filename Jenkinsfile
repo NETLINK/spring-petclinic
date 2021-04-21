@@ -18,22 +18,14 @@ pipeline {
 				url: 'https://github.com/NETLINK/spring-petclinic.git'
 			}
 		}
+                
+                stage( 'Maven Build' ) {
+                        steps {
+                                sh 'mvn clean install'
+                        }
+                }
 
-		stage( 'SonarQube Analysis' ) {
-			agent any
-			steps {
-				withSonarQubeEnv( 'SonarQube' ) {
-					sh 'mvn package sonar:sonar'
-				}
-			}
-		}
-		stage( 'Quality Gate' ) {
-			steps {
-				timeout( time: 1, unit: 'HOURS' ) {
-					waitForQualityGate abortPipeline: true
-				}
-			}
-		}
+
 		stage( 'Build Docker Image' ) {
 			steps {
 				sh "docker build -t netlinkie/petclinic:${env.BUILD_ID} ."
