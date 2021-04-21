@@ -19,13 +19,36 @@ pipeline {
 			}
 		}
                 
-                stage( 'Maven Build' ) {
-                        steps {
-                                sh 'mvn clean install'
-                        }
-                }
-
-
+		stage( 'Validate' ) {
+			steps {
+				sh 'mvn validate'
+			}
+		}
+		stage( 'Build' ) {
+			steps {
+				sh 'mvn compile'
+			}
+		}
+		stage( 'Test' ) {
+			steps {
+				sh 'mvn test'
+			}
+		}
+		stage( 'SonarQube Analysis' ) {
+			agent any
+			steps {
+				withSonarQubeEnv( 'SonarQube' ) {
+					sh 'mvn package sonar:sonar'
+				}
+			}
+		}
+		stage( 'Quality Gate' ) {
+			steps {
+				timeout( time: 1, unit: 'HOURS' ) {
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
 		stage( 'Build Docker Image' ) {
 			steps {
 				sh "docker build -t netlinkie/petclinic:${env.BUILD_ID} ."
@@ -39,11 +62,6 @@ pipeline {
 				sh "docker push netlinkie/petclinic:${env.BUILD_ID}"
 			}
 		}
-		stage( 'Deploy to GKE' ) {
-			steps {
-				sh "sed -i 's/petclinic:latest/petclinic:${env.BUILD_ID}/g' deployment.yaml"
-				step( [ $class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true ] )
-			}
-		}
+
 	}
 }
