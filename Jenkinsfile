@@ -25,7 +25,12 @@ pipeline {
 		}
 		stage( 'Build' ) {
 			steps {
-				sh 'mvn compile war:war'
+				sh 'mvn compile'
+			}
+		}
+		stage( 'Test' ) {
+			steps {
+				sh 'mvn test'
 			}
 		}
 		stage( 'SonarQube Analysis' ) {
