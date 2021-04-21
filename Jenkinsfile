@@ -18,21 +18,7 @@ pipeline {
 				url: 'https://github.com/NETLINK/spring-petclinic.git'
 			}
 		}
-		stage( 'Validate' ) {
-			steps {
-				sh 'mvn validate'
-			}
-		}
-		stage( 'Build' ) {
-			steps {
-				sh 'mvn clean compile jar:jar'
-			}
-		}
-		stage( 'Test' ) {
-			steps {
-				sh 'mvn test'
-			}
-		}
+
 		stage( 'SonarQube Analysis' ) {
 			agent any
 			steps {
