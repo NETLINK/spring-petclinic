@@ -30,7 +30,7 @@ pipeline {
 
 		stage( 'Build Docker Image' ) {
 			steps {
-				sh 'docker build -t netlinkie/petclinic:1.0.0 /home/ubuntu'
+				sh 'docker build -t netlinkie/petclinic:1.0.0 /home/ubuntu/jenkins/workspace/PetClinic-DeclarativePipeline'
 			}
 		}
 		stage( 'Push Docker Image' ) {
