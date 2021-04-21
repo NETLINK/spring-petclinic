@@ -2,35 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: petclinic
-  labels:
-    app: petclinic
+  namespace: default
 spec:
-  strategy:
-    type: Recreate
-template:
-  metadata:
-    labels:
+  replicas: 1
+  selector:
+    matchLabels:
       app: petclinic
-  spec:
-    containers:
-    - name: petclinic
-      image: netlinkie/petclinic:latest
-      imagePullPolicy: Always
-      ports:
-      - containerPort: 5000
-        name: petclinic
-
+  template:
+    metadata:
+      labels:
+        app: petclinic
+    spec:
+      containers:
+      - name: petclinic
+        image: netlinkie/petclinic:latest
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: petclinic
-  labels:
-    app: petclinic
+  namespace: default
 spec:
+  type: LoadBalancer
+  selector:
+    app: petclinic
   ports:
-    - port: 5000
-      targetPort: 5000
-selector:
-  app: petclinic
-type: LoadBalancer
+  - port: 5000
+    targetPort: 5000
