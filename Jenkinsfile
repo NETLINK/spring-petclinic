@@ -24,9 +24,9 @@ pipeline {
 				sh 'mvn validate'
 			}
 		}
-		stage( 'Clean' ) {
+		stage( 'Test & Generate Surefire Reports' ) {
 			steps {
-				sh 'mvn clean test cobertura:cobertura'
+				sh 'mvn clean surefire-report:report'
 			}
 		}
 		stage( 'SonarQube Analysis' ) {
