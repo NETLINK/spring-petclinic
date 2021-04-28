@@ -24,7 +24,7 @@ pipeline {
 				sh 'mvn validate'
 			}
 		}
-		stage( 'Test & Generate Surefire Reports' ) {
+		stage( 'Test & Create Reports' ) {
 			steps {
 				sh 'mvn clean surefire-report:report'
 			}
