@@ -24,11 +24,7 @@ pipeline {
 				sh 'mvn validate'
 			}
 		}
-		stage( 'Build (Compile, Test, Package)' ) {
-			steps {
-				sh 'mvn clean'
-			}
-		}
+
 		stage( 'SonarQube Analysis' ) {
 			agent any
 			steps {
