@@ -26,7 +26,7 @@ pipeline {
 		}
 		stage( 'Clean' ) {
 			steps {
-				sh 'mvn clean test'
+				sh 'mvn clean test cobertura:cobertura'
 			}
 		}
 		stage( 'SonarQube Analysis' ) {
